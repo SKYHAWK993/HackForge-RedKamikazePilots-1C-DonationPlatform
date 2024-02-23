@@ -33,14 +33,14 @@
 
         
     </style>
-    <title>UserRegistration</title>
+    <title>UserLogin</title>
 </head>
 <body>
     
     <div class="form-container">
         
         <div class="register-form-container">
-            <form class="register-form">
+            <form class="register-form" action="/user_login" method="post">
                 <div class="form-group">
                     <label for="formGroupExampleInput">Name</label>
                     <input type="text" class="form-control" placeholder="Enter name" name="user_name">
@@ -53,10 +53,6 @@
                 <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
                 <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="user_password">
-                </div>
-                <div class="form-group">
-                    <label for="exampleInputPassword1">Confirm Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="user_confirmation">
                 </div>
                 <div class="button-con">
                     <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Submit</button>

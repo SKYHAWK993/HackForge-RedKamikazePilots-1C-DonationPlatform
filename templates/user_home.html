@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareConnect</title>
+
+
+
+    <style>
+
+        body{
+            background-color: gray;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+
+        }
+
+        .container{
+            background-color: antiquewhite;
+            display: flex;
+            flex-direction: row;
+            height: 98vh;
+            width: 60vw;
+            align-items: stretch;
+        }
+        .navcol{
+            background-color: aqua;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .center{
+            background-color: aquamarine;
+            display: flex;
+            flex-direction: column;
+            flex: 5;
+            
+        }
+        .button{
+            background-color: beige;
+        }
+        .feed{
+            background-color:darksalmon;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+        .subscribed{
+            background-color: cadetblue;
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+            
+        }
+
+        .post-container{
+            background-color: azure;
+            gap: 5px;
+            border-radius: 5px;
+            box-shadow: 13px 14px 35px 0px rgba(0,0,0,0.1);
+        }
+
+/*post css */
+
+.post-block{
+    position: relative;
+    width: 100%;
+}
+
+.post-card {
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
+  text-align: left;
+  border-radius: 0.5rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.header {
+  padding: 1.25rem 1rem 1rem 1rem;
+  background-color: #ffffff;
+}
+.content {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.title {
+  color: #111827;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.message {
+  margin-top: 0.5rem;
+  color: #6B7280;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.actions {
+  margin: 0.75rem 1rem;
+  background-color: #F9FAFB;
+}
+
+.donate-btn {
+  display: inline-flex;
+  padding: 0.5rem 1rem;
+  background-color: #f5b52c;
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  justify-content: center;
+  width: 40%;
+  max-width: 150px;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: transparent;
+  box-shadow: 0 1px 2px 0 rgba(248, 248, 248, 0.05) 0.05);
+}
+
+.cancel {
+  display: inline-flex;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  justify-content: center;
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #D1D5DB;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+    </style>
+    
+</head>
+<body>
+    
+    <div class="container">
+        
+
+
+
+        <!--nav feed-->
+        <div class="navcol">
+            <p>qwertyuiop</p>
+
+                <!--button start-->
+                <div class="nav-btn">
+                    <a href="/a">
+                        <button class="button-36" role="button">Button 1</button>
+                    </a>
+                </div>
+                <!--button end-->
+
+                <!--button start-->
+                <div class="nav-btn">
+                    <a href="/a">
+                        <button class="button-36" role="button">Button 2</button>
+                    </a>
+                </div>
+                <!--button end-->
+        </div>
+
+
+
+        <div class="center">
+            <div class="buttons">
+                asdfghjkl
+            </div>
+
+
+            <!--center feed-->
+            
+            {% block feed %}
+            {% endblock feed %}
+        </div>
+
+
+
+        <!--subscribed feed-->
+        <div class="subscribed">
+            qazwsxedcrf
+
+        </div>
+    </div>
+
+</body>
+</html>

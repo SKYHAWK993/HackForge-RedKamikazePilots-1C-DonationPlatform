@@ -9,6 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import login_required
 
+
 app = Flask(__name__)
 
 app.config["SESSION_PERMANENT"] = False
@@ -61,8 +62,10 @@ def user_login():
             rows[0]["hash"], request.form.get("user_password")
         ):
             return render_template("user_login.html", string='Your password is incorrect')
+        if not rows[0]["email"] == request.form.get("user_email"):
+            return render_template("user_login.html", string='Your email is incorrect')
         
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = rows[0]["user_id"]
 
         return redirect("user_home")
     elif request.method == "GET":
@@ -110,10 +113,11 @@ def ngo_login():
         rows = db.execute(
             "SELECT * FROM ngo WHERE name = ?", request.form.get("ngo_name")
         )
+
         if len(rows) != 1:
-                return render_template("ngo_login.html", string='You must register first')
+            return render_template("ngo_login.html", string='You must register first')
         if not check_password_hash(
-            rows[0]["hash"], request.form.get("user_password")
+            rows[0]["hash"], request.form.get("ngo_password")
         ):
             return render_template("ngo_login.html", string='Your password is incorrect')
         
@@ -142,7 +146,7 @@ def ngo_register():
         if password != confirmation:
             return render_template("register.html", string="Both password and reentered password must be same")
         db.execute(
-                "INSERT INTO ngo (name, email, hash, id, donations) VALUES (?, ?, ?, ?, 0)",
+                "INSERT INTO ngo (name, email, hash, ngo_id) VALUES (?, ?, ?, ?)",
                 name, 
                 email,
                 generate_password_hash(password),
@@ -154,23 +158,30 @@ def ngo_register():
         return render_template("ngo_register.html")
 
 @app.route("/user_home")
+@login_required
 def user_home():
-    return render_template("user_home.html")
+    name = db.execute("SELECT name FROM users WHERE user_id = ?", session["user_id"])
+    sub_ngo = db.execute("SELECT ngo_name FROM subscriptions WHERE username = ?", name)
+    sub_posts = db.execute("SELECT * FROM posts WHERE ngo_name IN sub_ngo")
+    sub_petitions = db.execute("SELECT * FROM petitions WHERE ngo_name IN sub_ngo")
+    return render_template("user_home.html", sub_ngo=sub_ngo, sub_posts=sub_posts, sub_petitions=sub_petitions)
 
 @app.route("/explore_ngo")
 def explore_ngo():
-    return render_template("explore_ngo.html")
+    ngo_list = db.execute("SELECT name FROM ngo")
+    return render_template("explore_ngo.html", ngo_list=ngo_list)
 
 @app.route("/ngo_home")
 def ngo_home():
     return render_template("ngo_home.html")
 
 
-@app.route("/newpetition")
+@app.route("/newpetition", methods=["GET", "POST"])
 @login_required
 def newpetition():
     if request.method == "POST":
-        name = request.form.get("ngo_name")
+        row = db.execute("SELECT name FROM ngo WHERE ngo_id = ?", session["user_id"])
+        name = row[0]["name"]
         title = request.form.get("petition_title")
         description = request.form.get("petition_description")
         vote_goal = request.form.get("petition_goal")
@@ -187,11 +198,12 @@ def newpetition():
         return render_template("newpetition.html")
 
 
-@app.route("/newpost")
+@app.route("/newpost", methods=["GET", "POST"])
 @login_required
 def newpost():
     if request.method == "POST":
-        name = request.form.get("ngo_name")
+        row = db.execute("SELECT name FROM ngo WHERE ngo_id = ?", session["user_id"])
+        name = row[0]["name"]
         title = request.form.get("post_title")
         description = request.form.get("post_description")
         date = request.form.get("post_date")
@@ -206,8 +218,6 @@ def newpost():
         return render_template("newpost.html")
 
 
-
-
 @app.route("/donation")
 def donation():
     return render_template("donation.html")
@@ -216,9 +226,6 @@ def donation():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('blunder.html'), 404
-
-
-
 
 
 #donations !!!!!

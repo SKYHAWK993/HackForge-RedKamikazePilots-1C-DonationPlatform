@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
+    <style>
+        .form-container{
+            display: flex;
+            justify-content: center;
+            margin-top: 100px;
+        }
+
+        .register-form-container{
+            background-color: rgb(239, 219, 252);
+            max-width: 500px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .form-group{
+            padding: 6px;
+        }
+
+        .button-con{
+            display: flex;
+            justify-content: center;
+
+        }
+
+        
+    </style>
+    <title>Create Post</title>
+</head>
+<body>
+    
+    <div class="form-container">
+        
+        <div class="register-form-container">
+            <form class="register-form" action="/newpost" method="post">
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Post Title</label>
+                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Post Title" name="post_title">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Post Description</label>
+                    <textarea id="Post Description" name="post_description" rows="4" cols="30">
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="formGroupExampleInput">Date</label>
+                    <input type="date" class="form-control" placeholder="Post date" name="post_date">
+                </div>
+                <div class="button-con">
+                    <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
