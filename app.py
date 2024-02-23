@@ -1,15 +1,15 @@
 import os
 import json
+import stripe
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import login_required
 
-
-app = Flask(name)
+app = Flask(__name__)
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -112,16 +112,16 @@ def ngo_login():
         )
         if len(rows) != 1:
                 return render_template("ngo_login.html", string='You must register first')
-            if not check_password_hash(
-                rows[0]["hash"], request.form.get("user_password")
-            ):
-                return render_template("ngo_login.html", string='Your password is incorrect')
-            
-            session["user_id"] = rows[0]["ngo_id"]
+        if not check_password_hash(
+            rows[0]["hash"], request.form.get("user_password")
+        ):
+            return render_template("ngo_login.html", string='Your password is incorrect')
+        
+        session["user_id"] = rows[0]["ngo_id"]
 
-            return redirect("ngo_home")
-        elif request.method == "GET":
-            return render_template("ngo_login.html")
+        return redirect("ngo_home")
+    elif request.method == "GET":
+        return render_template("ngo_login.html")
 
 @app.route("/ngo_register", methods=["GET", "POST"])
 def ngo_register():
@@ -206,6 +206,8 @@ def newpost():
         return render_template("newpost.html")
 
 
+
+
 @app.route("/donation")
 def donation():
     return render_template("donation.html")
@@ -214,3 +216,84 @@ def donation():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('blunder.html'), 404
+
+
+
+
+
+#donations !!!!!
+
+stripe_keys = {
+    "secret_key": os.environ["STRIPE_SECRET_KEY"],
+    "publishable_key": os.environ["STRIPE_PUBLISHABLE_KEY"],
+    "endpoint_secret": os.environ["STRIPE_ENDPOINT_SECRET"], 
+}
+
+stripe.api_key = stripe_keys["secret_key"]
+
+
+@app.route("/config")
+def get_publishable_key():
+    stripe_config = {"publicKey": stripe_keys["publishable_key"]}
+    return jsonify(stripe_config)
+
+@app.route("/create-checkout-session")
+def create_checkout_session():
+    domain_url = "http://127.0.0.1:5000/"
+    stripe.api_key = stripe_keys["secret_key"]
+
+    try:
+       
+        checkout_session = stripe.checkout.Session.create(
+            success_url=domain_url + "success?session_id={CHECKOUT_SESSION_ID}",
+            cancel_url=domain_url + "cancelled",
+            payment_method_types=["card"],
+            mode="payment",
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": "usd",
+                        "product_data": {
+                            "name": "NGO 1",
+                        },
+                        "unit_amount": 2000,  
+                    },
+                    "quantity": 1,
+                }
+            ]
+        )
+        return jsonify({"sessionId": checkout_session["id"]})
+    except Exception as e:
+        return jsonify(error=str(e)), 403
+
+
+    
+@app.route("/success")
+def success():
+    return render_template("success.html")
+
+
+@app.route("/cancelled")
+def cancelled():
+    return render_template("cancelled.html")
+
+@app.route("/webhook", methods=["POST"])
+def stripe_webhook():
+    payload = request.get_data(as_text=True)
+    sig_header = request.headers.get("Stripe-Signature")
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, stripe_keys["endpoint_secret"]
+        )
+
+    except ValueError as e:
+        return "Invalid payload", 400
+    except stripe.error.SignatureVerificationError as e:
+        return "Invalid signature", 400
+
+    if event["type"] == "checkout.session.completed":
+        print("Payment was successful.")
+
+
+    return "Success", 200

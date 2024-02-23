@@ -1,0 +1,13 @@
+CREATE TABLE users (user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, username TEXT NOT NULL, email TEXT NOT NULL, hash TEXT NOT NULL);
+
+CREATE TABLE sqlite_sequence(name,seq);
+
+CREATE UNIQUE INDEX username ON users (username);
+
+CREATE TABLE ngo (ngo_id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, hash TEXT NOT NULL);
+
+CREATE TABLE subscriptions (username TEXT NOT NULL, ngo_name TEXT NOT NULL, donations INTEGER);
+
+CREATE TABLE posts (ngo_name TEXT NOT NULL, post_title TEXT NOT NULL, post_description TEXT NOT NULL, likes INTEGER, date TEXT NOT NULL);
+
+CREATE TABLE petitions (ngo_name TEXT NOT NULL, petition_title TEXT NOT NULL, petition_description TEXT NOT NULL, petition_vote INTEGER, petvot_goal INTEGER NOT NULL, date TEXT NOT NULL);
