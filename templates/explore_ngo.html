@@ -106,10 +106,10 @@
 
 
 
-    {% for i in range(100) %}
+    {% for i in ngo_list %}
     <div class="ngo-container">
         <button class="cssbuttons-io-button">
-            Get started
+            {{ i["name"] }}
             <div class="icon">
               <svg
                 height="24"

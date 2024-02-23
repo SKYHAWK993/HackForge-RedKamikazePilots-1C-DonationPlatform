@@ -9,6 +9,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import login_required
 
+import random
+
 
 app = Flask(__name__)
 
@@ -163,11 +165,11 @@ def user_home():
     sub_posts=[]
     sub_petitions=[]
     name = db.execute("SELECT username FROM users WHERE user_id = ?", session["user_id"])
-    sub_ngo = db.execute("SELECT ngo_name FROM subscriptions WHERE username = ?", name[0]["username"])
+    sub_ngo = db.execute("SELECT name FROM ngo")
     sub_posts = db.execute("SELECT * FROM posts")
     sub_petitions = db.execute("SELECT * FROM petitions")
 
-    return render_template("user_home.html", sub_ngo=sub_ngo, sub_posts=sub_posts, sub_petitions=sub_petitions)
+    return render_template("user_home.html", ngo=sub_ngo, posts=sub_posts, petitions=sub_petitions)
 
 @app.route("/explore_ngo")
 def explore_ngo():

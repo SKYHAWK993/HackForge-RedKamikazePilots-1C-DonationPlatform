@@ -112,7 +112,29 @@
 
                     
 
+                    {% for i in posts %}
+
                     <div class="user-feed-post">
+                        <div class="card border-primary mb-3" style="max-width: 20rem;">
+                            <div class="card-header">{{ i["ngo_name"] }}</div>
+                            <div class="card-body">
+                                <h1>{{ i["post_title"] }}</h1>
+                            <p class="card-text">{{ i["post_description"] }}</p>
+                            <small>{{ i["date"] }}</small>
+                            </div>
+                            <button class="button is-primary" id="submitBtn" type="button">Donate</button>
+                        </div>
+                        
+                    </div>
+
+                    
+
+                    {% endfor %}
+
+
+                    <!--
+
+                         <div class="user-feed-post">
                         <div class="card border-primary mb-3" style="max-width: 20rem;">
                             <div class="card-header">Header</div>
                             <div class="card-body">
@@ -130,8 +152,11 @@
                             </div>
                             <button class="button is-primary" id="submitBtn" type="button">Donate</button>
                         </div>
-                        
                     </div>
+
+                    -->
+
+                    
                     
 
                 </div>
@@ -143,6 +168,17 @@
 
 
                 <ul class="list-group">
+
+                    {% for row in ngo %}
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ row["name"] }}
+                    <span class="badge bg-primary rounded-pill"></span>
+                    </li>
+
+                    {% endfor %}
+
+                    <!--
 
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                     Cras justo odio
@@ -168,6 +204,8 @@
                         Morbi leo risus
                         <span class="badge bg-primary rounded-pill">1</span>
                     </li>
+
+                    -->
 
                 </ul>
                 
