@@ -3,22 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareConnect</title>
+    <title>user_feed</title>
 
+
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"></script>
+    <link rel="stylesheet" href="https://bootswatch.com/5/materia/bootstrap.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <script src="https://js.stripe.com/v3/"></script>  <!-- new -->
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
 
 
     <style>
-
-        body{
-            background-color: gray;
+        .page-con-center{
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             justify-content: center;
-
+            align-items: center;
         }
 
-        .container{
-            background-color: antiquewhite;
+
+        .page-container{
+            background-color: rgb(206, 206, 206);
             display: flex;
             flex-direction: row;
             height: 98vh;
@@ -26,176 +34,150 @@
             align-items: stretch;
         }
         .navcol{
-            background-color: aqua;
+            background-color: rgb(206, 206, 206);
             flex: 2;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
         }
         .center{
-            background-color: aquamarine;
+            background-color: rgb(196, 196, 196);
             display: flex;
             flex-direction: column;
             flex: 5;
             
         }
         .button{
-            background-color: beige;
+            background-color: rgb(122, 122, 122);
         }
         .feed{
-            background-color:darksalmon;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 10px;
+            background-color:rgb(110, 110, 110);
         }
         .subscribed{
-            background-color: cadetblue;
+            background-color: rgb(148, 148, 148);
             flex: 3;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 10px;
             
         }
 
-        .post-container{
-            background-color: azure;
-            gap: 5px;
-            border-radius: 5px;
-            box-shadow: 13px 14px 35px 0px rgba(0,0,0,0.1);
+        .user-feed-post{
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-self: center;
         }
-
-/*post css */
-
-.post-block{
-    position: relative;
-    width: 100%;
-}
-
-.post-card {
-  overflow: hidden;
-  position: relative;
-  background-color: #ffffff;
-  text-align: left;
-  border-radius: 0.5rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-.header {
-  padding: 1.25rem 1rem 1rem 1rem;
-  background-color: #ffffff;
-}
-.content {
-  margin-top: 0.75rem;
-  text-align: center;
-}
-
-.title {
-  color: #111827;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.5rem;
-}
-
-.message {
-  margin-top: 0.5rem;
-  color: #6B7280;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.actions {
-  margin: 0.75rem 1rem;
-  background-color: #F9FAFB;
-}
-
-.donate-btn {
-  display: inline-flex;
-  padding: 0.5rem 1rem;
-  background-color: #f5b52c;
-  color: #ffffff;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: 500;
-  justify-content: center;
-  width: 40%;
-  max-width: 150px;
-  border-radius: 0.375rem;
-  border-width: 1px;
-  border-color: transparent;
-  box-shadow: 0 1px 2px 0 rgba(248, 248, 248, 0.05) 0.05);
-}
-
-.cancel {
-  display: inline-flex;
-  margin-top: 0.75rem;
-  padding: 0.5rem 1rem;
-  background-color: #ffffff;
-  color: #374151;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: 500;
-  justify-content: center;
-  width: 100%;
-  border-radius: 0.375rem;
-  border: 1px solid #D1D5DB;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
     </style>
-    
 </head>
 <body>
-    
-    <div class="container">
-        
 
-
-
-        <!--nav feed-->
-        <div class="navcol">
-            <p>qwertyuiop</p>
-
-                <!--button start-->
-                <div class="nav-btn">
-                    <a href="/a">
-                        <button class="button-36" role="button">Button 1</button>
-                    </a>
-                </div>
-                <!--button end-->
-
-                <!--button start-->
-                <div class="nav-btn">
-                    <a href="/a">
-                        <button class="button-36" role="button">Button 2</button>
-                    </a>
-                </div>
-                <!--button end-->
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">CareConnect</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link active" href="/">Home
+                  <span class="visually-hidden">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/explore_ngo">Explore-NGO</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
+              
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-sm-2" type="search" placeholder="Search">
+              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
         </div>
+      </nav>
 
 
 
-        <div class="center">
-            <div class="buttons">
-                asdfghjkl
+    <div class="page-con-center">
+
+    
+        <div class="page-container">
+
+
+            <div class="center">
+                
+                <div class="feed">
+
+                    
+
+                    <div class="user-feed-post">
+                        <div class="card border-primary mb-3" style="max-width: 20rem;">
+                            <div class="card-header">Header</div>
+                            <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                            <button class="button is-primary" id="submitBtn" type="button">Donate</button>
+                        </div>
+                        
+                    </div>
+                    <div class="user-feed-post">
+                        <div class="card border-primary mb-3" style="max-width: 20rem;">
+                            <div class="card-header">Header</div>
+                            <div class="card-body">
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                            <button class="button is-primary" id="submitBtn" type="button">Donate</button>
+                        </div>
+                        
+                    </div>
+                    
+
+                </div>
+
             </div>
 
 
-            <!--center feed-->
-            
-            {% block feed %}
-            {% endblock feed %}
+            <div class="subscribed">
+
+
+                <ul class="list-group">
+
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Cras justo odio
+                    <span class="badge bg-primary rounded-pill">14</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Dapibus ac facilisis in
+                    <span class="badge bg-primary rounded-pill">2</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Morbi leo risus
+                    <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Cras justo odio
+                        <span class="badge bg-primary rounded-pill">14</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Dapibus ac facilisis in
+                        <span class="badge bg-primary rounded-pill">2</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Morbi leo risus
+                        <span class="badge bg-primary rounded-pill">1</span>
+                    </li>
+
+                </ul>
+                
+
+            </div>
+
+
+
         </div>
 
-
-
-        <!--subscribed feed-->
-        <div class="subscribed">
-            qazwsxedcrf
-
-        </div>
     </div>
-
 </body>
 </html>

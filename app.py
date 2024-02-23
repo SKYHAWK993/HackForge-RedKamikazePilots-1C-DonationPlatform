@@ -160,10 +160,13 @@ def ngo_register():
 @app.route("/user_home")
 @login_required
 def user_home():
-    name = db.execute("SELECT name FROM users WHERE user_id = ?", session["user_id"])
-    sub_ngo = db.execute("SELECT ngo_name FROM subscriptions WHERE username = ?", name)
-    sub_posts = db.execute("SELECT * FROM posts WHERE ngo_name IN sub_ngo")
-    sub_petitions = db.execute("SELECT * FROM petitions WHERE ngo_name IN sub_ngo")
+    sub_posts=[]
+    sub_petitions=[]
+    name = db.execute("SELECT username FROM users WHERE user_id = ?", session["user_id"])
+    sub_ngo = db.execute("SELECT ngo_name FROM subscriptions WHERE username = ?", name[0]["username"])
+    sub_posts = db.execute("SELECT * FROM posts")
+    sub_petitions = db.execute("SELECT * FROM petitions")
+
     return render_template("user_home.html", sub_ngo=sub_ngo, sub_posts=sub_posts, sub_petitions=sub_petitions)
 
 @app.route("/explore_ngo")
@@ -172,8 +175,12 @@ def explore_ngo():
     return render_template("explore_ngo.html", ngo_list=ngo_list)
 
 @app.route("/ngo_home")
+@login_required
 def ngo_home():
-    return render_template("ngo_home.html")
+    ngo_info = db.execute("SELECT * FROM ngo WHERE ngo_id = ?", session["user_id"])
+    posts = db.execute("SELECT * FROM posts WHERE ngo_name = ?", ngo_info[0]["name"])
+    petitions = db.execute("SELECT * FROM petitions WHERE ngo_name = ?", ngo_info[0]["name"])
+    return render_template("ngo_home.html", ngo_info=ngo_info, post=posts, petitions=petitions)
 
 
 @app.route("/newpetition", methods=["GET", "POST"])
